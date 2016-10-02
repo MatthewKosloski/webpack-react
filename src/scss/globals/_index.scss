@@ -1,0 +1,22 @@
+//---------------------------
+//
+// Globals
+// =======
+//
+// Place styles for used across
+// the entire site in here!
+//
+// You must declare a CSS class 
+// global, like so:
+//
+// :global(.some-global-class) 
+//
+//---------------------------
+
+:global(.clearfix) {
+	&::after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}

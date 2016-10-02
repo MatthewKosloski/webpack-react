@@ -1,0 +1,16 @@
+//---------------------------
+//
+// Utilities
+// =========
+//
+// The utilities folder gathers all Sass tools and utilities used across the project. 
+// Every variable, function, mixin, and placeholder should be put in here. 
+// 
+// The rule of thumb for this folder is that it should not output a single line 
+// of CSS when compiled on its own. These are nothing but Sass utilities.
+//
+//---------------------------
+
+@import
+	'variables',
+	'mixins';
