@@ -1,0 +1,17 @@
+//---------------------------
+//
+// Globals
+// =======
+//
+// Global CSS classes go here.
+// They are at a higher level on
+// the cascade than CSS modules, and
+// the class names don't change during
+// the build process.
+//
+//---------------------------
+
+@import
+	'~bourbon',
+	'base/index',
+	'clearfix';

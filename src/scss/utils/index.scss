@@ -1,0 +1,21 @@
+//---------------------------
+//
+// Utilities
+// =========
+//
+// This is a folder for Sass code,
+// which won't be outputted.
+//
+// Examples: Sass mixins, functions, 
+// variables, etc.
+//
+// Usage in CSS modules stylesheets:
+// 
+// @import '~utils';
+//
+//---------------------------
+
+@import 
+	'~bourbon',
+	'variables/index',
+	'mixins/index';

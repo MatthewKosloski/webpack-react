@@ -1,17 +1,37 @@
 const webpack = require('webpack');
 const path = require('path');
+const cssnano = require('cssnano');
+const resolve = require('path').resolve;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const debug = process.env.NODE_ENV !== 'production';
+const IS_DEV = process.env.NODE_ENV !== 'production';
+
+const LOCAL_IDENT_NAME = IS_DEV ? 
+    '[name]-scss__[local]-class___[hash:base64:2]' 
+: '[hash:base64:2]';
+
+const globals = [
+    resolve('./node_modules/normalize.css'), // any NPM module
+    resolve('./src/scss/globals'), // global CSS classes
+];
+
+const cssModules = [
+    resolve('./src/components'), // CSS modules
+];
 
 module.exports = {
-    devtool: debug ? 'source-map' : null,
+    devtool: IS_DEV ? 'source-map' : null,
     entry: {
-        bundle: './src/app'
+        bundle: [
+            './node_modules/normalize.css',
+            './src/scss/globals',
+            './src/app'
+        ]
     },
     output: {
         path: path.join(__dirname, 'public'),
-        filename: debug ? './js/[name].js' : './js/[name].min.js',
+        filename: IS_DEV ? './js/[name].js' : './js/[name].min.js',
         publicPath: '/static'
     },
     module: {
@@ -21,17 +41,23 @@ module.exports = {
                 exclude:  /node_modules/,
                 loader: 'babel'
             },
+            // loader for CSS modules
             {
-                test: /\.css$/,
-                loader:  'style!css'
+                test: /\.s?css$/,
+                loader:  ExtractTextPlugin.extract('style', `css?modules&localIdentName=${LOCAL_IDENT_NAME}!sass`),
+                include: cssModules,
+                exclude: globals
             },
+            // loader for global styles
             {
-                test: /\.scss$/,
-                loader:  ExtractTextPlugin.extract('style', `css?modules&localIdentName=${debug ? '[name]__[local]___[hash:base64:5]' : '[hash:base64:5]_[hash:base64:3]_[hash:base64:1]'}!sass`)
+                test: /\.s?css$/,
+                loader:  ExtractTextPlugin.extract('style', 'css!sass'),
+                include: globals,
+                exclude: cssModules
             }
         ]
     },
-    plugins: debug ? 
+    plugins: IS_DEV ? 
     [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new ExtractTextPlugin('./css/[name].css', {allChunks: true})
@@ -40,6 +66,12 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
         new ExtractTextPlugin('./css/[name].min.css', {allChunks: true}),
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: cssnano,
+            cssProcessorOptions: { discardComments: {removeAll: true } },
+            canPrint: true
+        }),
         new webpack.DefinePlugin({
             'process.env':{
                 'NODE_ENV': JSON.stringify('production')
@@ -50,8 +82,7 @@ module.exports = {
         extensions: ['', '.js', '.css', '.scss'],
         alias: {
             bourbon: path.join(__dirname, '/node_modules/bourbon/app/assets/stylesheets/_bourbon.scss'),
-            normalize: path.join(__dirname, '/node_modules/normalize.css'),
-            main: path.join(__dirname, '/src/scss/main.scss')
+            utils: path.join(__dirname, '/src/scss/utils')
         }
     }
 };
