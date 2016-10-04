@@ -2,8 +2,11 @@ const webpack = require('webpack');
 const path = require('path');
 const cssnano = require('cssnano');
 const resolve = require('path').resolve;
+
+// Plugins
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 
@@ -31,8 +34,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'public'),
-        filename: IS_DEV ? './js/[name].js' : './js/[name].min.js',
-        publicPath: '/static'
+        filename: IS_DEV ? 'js/[name].js' : 'js/[name].min.js',
+        publicPath: '/'
     },
     module: {
         loaders: [
@@ -60,12 +63,12 @@ module.exports = {
     plugins: IS_DEV ? 
     [
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new ExtractTextPlugin('./css/[name].css', {allChunks: true})
+        new ExtractTextPlugin('css/[name].css', {allChunks: true})
     ] : [
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
-        new ExtractTextPlugin('./css/[name].min.css', {allChunks: true}),
+        new ExtractTextPlugin('css/[name].min.css', {allChunks: true}),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: cssnano,
@@ -76,6 +79,9 @@ module.exports = {
             'process.env':{
                 'NODE_ENV': JSON.stringify('production')
             }
+        }),
+        new HtmlWebpackPlugin({
+            minify: {collapseWhitespace: true}
         })
     ],
     resolve: {
