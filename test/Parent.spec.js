@@ -3,8 +3,8 @@ import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'jsdom';
 import { mount } from 'enzyme';
-import Parent from '../../src/components/Parent';
-import Child from '../../src/components/Child';
+import Parent from '../src/components/Parent';
+import Child from '../src/components/Child';
 
 const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
 global.document = doc;

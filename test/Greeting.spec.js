@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 
-import Greeting from '../../src/components/Greeting';
+import Greeting from '../src/components/Greeting';
 
 describe('<Greeting />', () => {
 
