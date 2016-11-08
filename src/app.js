@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import Foo from './components/Foo';
+import Greeting from './components/Greeting';
 
 const app = (
-	<Foo />
+	<Greeting name="Matthew" />
 );
 
 render(app, document.getElementById('app'));
