@@ -24,7 +24,7 @@ const cssModules = [
 ];
 
 module.exports = {
-    devtool: IS_DEV ? 'source-map' : null,
+    devtool: IS_DEV ? 'cheap-eval-source-map' : 'source-map',
     entry: {
         bundle: [
             './node_modules/normalize.css',
@@ -34,8 +34,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'public'),
-        filename: IS_DEV ? 'js/[name].js' : 'js/[name].min.js',
-        publicPath: '/'
+        filename: IS_DEV ? 'js/[name].js' : 'js/[name].min.js'
     },
     module: {
         loaders: [
@@ -62,17 +61,31 @@ module.exports = {
     },
     plugins: IS_DEV ? 
     [
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        new ExtractTextPlugin('css/[name].css', {allChunks: true})
+        new ExtractTextPlugin('css/[name].css', {
+            allChunks: true
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/index.html'
+        })
     ] : [
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
-        new ExtractTextPlugin('css/[name].min.css', {allChunks: true}),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
+        new ExtractTextPlugin('css/[name].min.css', {
+            allChunks: true
+        }),
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /\.css$/g,
             cssProcessor: cssnano,
-            cssProcessorOptions: { discardComments: {removeAll: true } },
+            cssProcessorOptions: { 
+                discardComments: {
+                    removeAll: true 
+                } 
+            },
             canPrint: true
         }),
         new webpack.DefinePlugin({
@@ -81,7 +94,10 @@ module.exports = {
             }
         }),
         new HtmlWebpackPlugin({
-            minify: {collapseWhitespace: true}
+            template: './src/index.html',
+            minify: {
+                collapseWhitespace: true
+            }
         })
     ],
     resolve: {
@@ -90,5 +106,11 @@ module.exports = {
             bourbon: path.join(__dirname, '/node_modules/bourbon/app/assets/stylesheets/_bourbon.scss'),
             utils: path.join(__dirname, '/src/scss/utils')
         }
+    },
+    devServer: {
+        contentBase: './public',
+        port: 3000,
+        noInfo: true,
+        hot: false
     }
 };

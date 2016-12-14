@@ -32,13 +32,14 @@
     "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0",
-    "webpack-dev-middleware": "^1.6.1"
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
     "test": "mocha --recursive --require babel-register --require ignore-styles || true",
     "test:watch": "mocha --watch --recursive --require babel-register --require ignore-styles || true",
-    "build": "NODE_ENV=production webpack -p",
-    "start": "node server.js"
+    "build": "NODE_ENV=production webpack -p --progress",
+    "dev": "webpack-dev-server"
   },
   "author": "",
   "license": "ISC"
