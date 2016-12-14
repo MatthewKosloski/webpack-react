@@ -7,14 +7,22 @@ This is a boilerplate, or starting point, for building React apps with modular C
 - Install dependencies with `npm install`
 - Start server `npm start`
 
-## Build
+## Development
+```
+  $ npm run dev
+```
 
-```js
+## Production
+```
   $ npm run build
 ```
 
 ## Test
 
-```js
+```
+  $ npm run test
+```
+
+```
   $ npm run test:watch
 ```
